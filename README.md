@@ -4,8 +4,8 @@ Once run, a reverse shell from your Windows Machine gets established to the Atta
 The code for the reverse shell is in `code.txt`. The rest is required to hide it from Windows Defender. For that a file to execute the reverse shell is needed (`launch.vbs`). We also have to encode the code for the reverse shell. After that we hide the code for our payload within our launch file using alternative datastreams on ntfs.
 
 ## Requirements
-- attacker machine with metasploit framework installed (e.g. Kali Linux)
-- windows machine
+- attacing machine with metasploit framework installed (e.g. Kali Linux)
+- target: Windows (only tested using Windows 11)
 
 ## Prepare
 1. Edit `code.txt` and replace the ip address with the ip address of the attacking machine.
